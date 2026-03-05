@@ -1,0 +1,16 @@
+CREATE TABLE fact_ownership_year (
+    firm_id BIGINT NOT NULL,
+    fiscal_year SMALLINT NOT NULL,
+    snapshot_id BIGINT NOT NULL,
+    managerial_inside_own DECIMAL(10,6) YES, -- (1) Tỷ lệ sở hữu BĐH (0..1)
+    state_own DECIMAL(10,6) YES,             -- (2) Tỷ lệ sở hữu nhà nước (0..1)
+    institutional_own DECIMAL(10,6) YES,     -- (3) Tỷ lệ sở hữu tổ chức trong nước (0..1)
+    foreign_own DECIMAL(10,6) YES,           -- (4) Tỷ lệ sở hữu nước ngoài (0..1)
+    note VARCHAR(255) YES,                   -- Ghi chú ETL
+    created_at TIMESTAMP YES DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (firm_id, fiscal_year, snapshot_id),
+    -- Ràng buộc FK để đảm bảo dữ liệu nhất quán
+    FOREIGN KEY (firm_id) REFERENCES dim_firm(firm_id),
+    FOREIGN KEY (snapshot_id) REFERENCES fact_data_snapshot(snapshot_id)
+);
