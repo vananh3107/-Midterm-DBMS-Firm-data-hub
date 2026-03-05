@@ -1,0 +1,37 @@
+-- 1. Tạo bảng fact_ownership_year
+CREATE TABLE fact_ownership_year (
+    firm_id BIGINT NOT NULL,
+    fiscal_year SMALLINT NOT NULL,
+    snapshot_id BIGINT NOT NULL,
+    managerial_inside_own DECIMAL(10,6) YES, -- (1) Tỷ lệ sở hữu BĐH (0..1)
+    state_own DECIMAL(10,6) YES,             -- (2) Tỷ lệ sở hữu nhà nước (0..1)
+    institutional_own DECIMAL(10,6) YES,     -- (3) Tỷ lệ sở hữu tổ chức trong nước (0..1)
+    foreign_own DECIMAL(10,6) YES,           -- (4) Tỷ lệ sở hữu nước ngoài (0..1)
+    note VARCHAR(255) YES,                   -- Ghi chú ETL
+    created_at TIMESTAMP YES DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (firm_id, fiscal_year, snapshot_id),
+    -- Ràng buộc FK để đảm bảo dữ liệu nhất quán
+    FOREIGN KEY (firm_id) REFERENCES dim_firm(firm_id),
+    FOREIGN KEY (snapshot_id) REFERENCES fact_data_snapshot(snapshot_id)
+);
+
+-- 2. Tạo bảng fact_market_year
+CREATE TABLE fact_market_year (
+    firm_id BIGINT NOT NULL,
+    fiscal_year SMALLINT NOT NULL,
+    snapshot_id BIGINT NOT NULL,
+    shares_outstanding BIGINT YES,           -- (5) Tổng số cổ phiếu lưu hành
+    -- ENUM cập nhật theo đúng ảnh mới nhất
+    price_reference ENUM('close_year_end', 'avg_year', 'close_fiscal_end') YES,
+    share_price DECIMAL(20,4) YES,           -- Giá cổ phiếu tham chiếu
+    market_value_equity DECIMAL(20,2) YES,   -- (23) Vốn hóa = price * shares
+    dividend_cash_paid DECIMAL(20,2) YES,    -- (34) Cổ tức bằng tiền mặt
+    eps_basic DECIMAL(20,6) YES,             -- (35) EPS
+    currency_code CHAR(3) NOT NULL DEFAULT 'VND', -- Mã tiền tệ
+    created_at TIMESTAMP YES DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (firm_id, fiscal_year, snapshot_id),
+    FOREIGN KEY (firm_id) REFERENCES dim_firm(firm_id),
+    FOREIGN KEY (snapshot_id) REFERENCES fact_data_snapshot(snapshot_id)
+);
