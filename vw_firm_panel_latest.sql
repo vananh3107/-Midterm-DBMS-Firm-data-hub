@@ -1,3 +1,4 @@
+USE vn_firm_panel;
 CREATE VIEW vw_firm_panel_latest AS
 SELECT
     f.firm_id,
