@@ -1,41 +1,41 @@
 import mysql.connector
 from datetime import date
 
-# CẤU HÌNH: Giang hãy sửa mật khẩu đúng của máy mình ở đây
 config = {
     'user': 'root', 
-    'password': 'Daohuonggiang25@', # <== THAY MẬT KHẨU WORKBENCH VÀO ĐÂY
+    'password': 'Daohuonggiang25@', # Giang thay mật khẩu máy mình vào nhé
     'host': '127.0.0.1',
     'database': 'vn_firm_panel'
 }
 
 def create_snapshot_2022():
-    conn = None # Khởi tạo để tránh lỗi UnboundLocalError
+    conn = None
     try:
         conn = mysql.connector.connect(**config)
         cursor = conn.cursor()
         
-        # Câu lệnh Insert (nhớ để version_tag khác với các bản đã có để tránh lỗi 1062)
+        # Câu lệnh SQL tạo snapshot
         sql = """INSERT INTO fact_data_snapshot 
                  (snapshot_date, fiscal_year, source_id, version_tag, created_by) 
                  VALUES (%s, %s, %s, %s, %s)"""
         
-        # Dữ liệu: Ngày hôm nay, Năm 2022, Nguồn 1, Tag 'v1.0-python', Người tạo Giang
-        data = (date.today(), 2022, 1, 'v2.0-final', 'GiangDao')
+        # Dữ liệu: Ngày hôm nay, Năm 2022, Nguồn 1, Tag mới, Người tạo là Giang
+        #
+        val = (date.today(), 2022, 1, 'v3.0-final', 'GiangDao')
         
-        cursor.execute(sql, data)
+        cursor.execute(sql, val)
         conn.commit()
         
         # Lấy ID tự tăng vừa được tạo
-        snapshot_id = cursor.lastrowid
+        new_id = cursor.lastrowid
         
-        print(f"--- THÔNG TIN SNAPSHOT MỚI ---")
+        print(f"--- TRẠNG THÁI: TẠO THÀNH CÔNG ---")
         print(f"Năm tài chính: 2022")
-        print(f"Snapshot ID vừa tạo: {snapshot_id}") # <== IN RA THEO YÊU CẦU
+        print(f"Mã Snapshot ID mới: {new_id}") # Đây là con số cuối cùng bạn cần!
         
     except mysql.connector.Error as err:
         if err.errno == 1062:
-            print("Lỗi: Snapshot năm 2022 với tag này đã tồn tại trong DB.")
+            print("Lỗi: Phiên bản 'v3.0-final' cho năm 2022 đã tồn tại. Hãy đổi tên tag khác trong code.")
         else:
             print(f"Lỗi kết nối: {err}")
     finally:
