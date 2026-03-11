@@ -14,8 +14,8 @@ def import_firms(file_path):
         conn = mysql.connector.connect(**config)
         cursor = conn.cursor()
         
-        # Đọc CSV
-        df = pd.read_csv(file_path)
+        # Đọc Excel
+        df = pd.read_excel(file_path)
         
         # Xử lý khoảng trắng thừa ở tiêu đề cột (để tránh lỗi NULL)
         df.columns = df.columns.str.strip()
@@ -52,4 +52,4 @@ def import_firms(file_path):
             conn.close()
 
 if __name__ == "__main__":
-    import_firms('firms.csv')
+    import_firms('firms.xlsx')
