@@ -1,1 +1,0 @@
-# -Midterm-DBMS-Firm-data-hub
