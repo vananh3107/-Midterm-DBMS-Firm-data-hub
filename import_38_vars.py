@@ -1,12 +1,16 @@
+import os
 import mysql.connector
 import pandas as pd
 import numpy as np
+from dotenv import load_dotenv
+
+load_dotenv()
 
 config = {
-    'user': 'root', 
-    'password': 'Daohuonggiang25@', # GIANG SỬA PASS MÁY MÌNH NHÉ
-    'host': '127.0.0.1',
-    'database': 'vn_firm_panel'
+    'host': os.getenv('DB_HOST'),
+    'user': os.getenv('DB_USER'),
+    'password': os.getenv('DB_PASS'),
+    'database': os.getenv('DB_NAME')
 }
 
 def import_clean_data():
