@@ -1,0 +1,16 @@
+Bước 1: Chuẩn bị Database (Schema)
+Trước khi chạy Python, hãy tạo cấu trúc bảng trong MySQL Workbench.
+Mở file schema_and_seed.sql
+Copy toàn bộ nội dung và chạy (Execute) trong MySQL Workbench để tạo database vn_firm_panel và các bảng dim_firm, fact_data_snapshot, fact_financial_year....
+Bước 2: Nạp danh sách công ty (Import Firms)
+Đây là bước khởi tạo "khung" danh sách các mã cổ phiếu.File sử dụng: import_firms.py và nguồn dữ liệu từ firms.xlsx
+Cách chạy: Mở Terminal và gõ:python import_firms.py
+Kết quả: Dữ liệu từ file Excel sẽ được đổ vào bảng dim_firm. 
+Bước này giúp định danh các công ty trước khi nạp số liệu tài chính.
+Bước 3: Nạp 38 biến tài chính (Import Financial Variables)
+Đây là bước "đổ" dữ liệu số liệu từ file Excel vào bảng thực tế.
+File Python: import_38_vars.py
+Nguồn dữ liệu: panel_2020_2024.xlsx
+Cơ chế hoạt động:Code sẽ đọc 38 cột biến từ file Excel panel_2020_2024.xlsx
+Nó tự động đối soát cột ticker trong Excel với ticker trong database để lấy firm_id chuẩn.
+Sau đó, nó nạp toàn bộ các biến vào các bảng tương ứng trong database.
